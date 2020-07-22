@@ -1,0 +1,65 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="row">
+  <h1 class="intro-text text-center">{{ author_name }}</h1>
+
+  <hr class="detail-separator">
+  <div class="col-md-6" style='width:30%'> 
+    <img src="{{ thumbnail }}" alt="{{ author_name }}" class="img-responsive center-block">
+  </div>
+  <div class="col-md-6" style='width:70%'>
+    <div>
+      <h2 class="text-center">About</h2>
+      <p>{{ about }}</p>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<h2 class="text-center" style="margin-bottom: 30px; margin-top: 0;">Books in our catalog</h2>
+
+{% if books_list %}
+  {% for book in books_list %}
+    <div class="col-sm-3">
+        <a href="{% url 'store:detail' book_id=book.id %}">
+          <img class="img-responsive center-block" src="{{ book.picture }}" alt="{{ book.title }}" style="max-height: 300px;">
+        </a>
+
+        {% if book.available %}
+          <div style="font-size: .9em; margin-top: 5px;" class='text-center'>
+            Available: <img src="/static/store/img/checkmark.png" class="available-icons">
+          </div>
+          {% else %}
+          <div style="font-size: .9em; margin-top: 5px;" class='text-center'>
+            Available: <img src="/static/store/img/x-mark.png" class="available-icons">
+          </div>
+
+          {% endif %}
+    
+    </div>
+
+    {% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+  {% endfor %}  
+
+{% else %}
+  <div class="text-center">
+    We found no books associated with this author in our catalog.
+  </div>
+
+{% endif %}
+  
+    {% if errors %}
+    <div>
+      {% for key, error in errors %}
+      {% autoescape off %}
+        {{ error }}
+      {% endautoescape %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

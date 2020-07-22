@@ -1,0 +1,9 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+{% include 'store/search_form.html' %}
+
+{% include 'store/list.html' with list_title='All our books' %}
+
+{% endblock %}

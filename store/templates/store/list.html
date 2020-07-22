@@ -1,0 +1,53 @@
+<div class="col-lg-12">
+    <hr>
+    <h2 class="intro-text text-center">{{ list_title }}
+    </h2>
+    <hr class="detail-separator">
+</div>
+
+{% if books|length_is:"0" %}
+    <div class="text-center">
+      We have found no result for your search in our catalog.
+    </div>
+
+{% else %}
+    {% for book in books %}
+        <div class="col-sm-4 text-center">
+            <a href="{% url 'store:detail' book_id=book.id %}">
+              <img class="img-responsive book-picture center-block" src="{{ book.picture }}" alt="{{ book.title }}">
+            </a>
+            <h3><a href="{% url 'store:detail' book_id=book.id %}">{{ book.title }}</a></h3>
+            {% for author in book.author.all %}
+                <p style="margin-bottom:5px"><a href="{% url 'store:profile' author_id=author.id %}">{{ author.name }}</a></p>
+            {% endfor %}
+            
+            {% if book.available %}
+            <div style="font-size: .9em">
+              Available: <img src="/static/store/img/checkmark.png" class="available-icons">
+            </div>
+            {% else %}
+            <div style="font-size: .9em">
+              Available: <img src="/static/store/img/x-mark.png" class="available-icons">
+            </div>
+
+            {% endif %}
+
+        </div>
+        {% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+    {% endfor %}
+
+{% endif %}
+
+{% if paginate %}
+  <div class="clearfix"></div>
+  <nav aria-label="">
+    <ul class="pager">
+      {% if books.has_previous %}
+          <li><a href="?page={{ books.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      {% if books.has_next %}
+          <li><a href="?page={{ books.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
